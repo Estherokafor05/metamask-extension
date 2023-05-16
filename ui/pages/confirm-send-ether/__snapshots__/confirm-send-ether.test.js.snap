@@ -299,7 +299,7 @@ exports[`ConfirmSendEther should render correct information for for confirm send
                 />
               </div>
               <span
-                class="box mm-text currency-display-component__text mm-text--body-md box--flex-direction-row box--color-text-default"
+                class="box mm-text currency-display-component__text mm-text--body-md mm-text--ellipsis box--flex-direction-row box--color-text-default"
               >
                 0
               </span>
@@ -449,7 +449,7 @@ exports[`ConfirmSendEther should render correct information for for confirm send
                         title="0.00021"
                       >
                         <span
-                          class="box mm-text currency-display-component__text mm-text--body-md box--flex-direction-row box--color-text-default"
+                          class="box mm-text currency-display-component__text mm-text--body-md mm-text--ellipsis box--flex-direction-row box--color-text-default"
                         >
                           0.00021
                         </span>
@@ -467,7 +467,7 @@ exports[`ConfirmSendEther should render correct information for for confirm send
                         title="0.00021 ETH"
                       >
                         <span
-                          class="box mm-text currency-display-component__text mm-text--body-md box--flex-direction-row box--color-text-default"
+                          class="box mm-text currency-display-component__text mm-text--body-md mm-text--ellipsis box--flex-direction-row box--color-text-default"
                         >
                           0.00021
                         </span>
@@ -512,7 +512,7 @@ exports[`ConfirmSendEther should render correct information for for confirm send
                         title="0.00021 ETH"
                       >
                         <span
-                          class="box mm-text currency-display-component__text mm-text--body-md box--flex-direction-row box--color-text-default"
+                          class="box mm-text currency-display-component__text mm-text--body-md mm-text--ellipsis box--flex-direction-row box--color-text-default"
                         >
                           0.00021
                         </span>
@@ -552,7 +552,7 @@ exports[`ConfirmSendEther should render correct information for for confirm send
                         title="0.00021"
                       >
                         <span
-                          class="box mm-text currency-display-component__text mm-text--body-md box--flex-direction-row box--color-text-default"
+                          class="box mm-text currency-display-component__text mm-text--body-md mm-text--ellipsis box--flex-direction-row box--color-text-default"
                         >
                           0.00021
                         </span>
@@ -570,7 +570,7 @@ exports[`ConfirmSendEther should render correct information for for confirm send
                         title="0.00021 ETH"
                       >
                         <span
-                          class="box mm-text currency-display-component__text mm-text--body-md box--flex-direction-row box--color-text-default"
+                          class="box mm-text currency-display-component__text mm-text--body-md mm-text--ellipsis box--flex-direction-row box--color-text-default"
                         >
                           0.00021
                         </span>
@@ -607,7 +607,7 @@ exports[`ConfirmSendEther should render correct information for for confirm send
                       title="0.00021 ETH"
                     >
                       <span
-                        class="box mm-text currency-display-component__text mm-text--body-md box--flex-direction-row box--color-text-default"
+                        class="box mm-text currency-display-component__text mm-text--body-md mm-text--ellipsis box--flex-direction-row box--color-text-default"
                       >
                         0.00021
                       </span>
