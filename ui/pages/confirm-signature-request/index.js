@@ -49,6 +49,37 @@ const signatureSelect = (txData) => {
   return SignatureRequestOriginal;
 };
 
+const messageTypeSelect = (txData, signMessage, cancelMessage) => {
+  console.log(txData);
+  const {
+    type,
+    msgParams: { siwe },
+  } = txData;
+
+  if (siwe?.isSIWEMessage) {
+    return {
+      sign: signMessage(SIGN_MESSAGE_TYPE.PERSONAL),
+      cancel: cancelMessage(SIGN_MESSAGE_TYPE.PERSONAL),
+    };
+  }
+
+  let cancel;
+  let sign;
+
+  if (type === MESSAGE_TYPE.PERSONAL_SIGN) {
+    cancel = cancelMessage(SIGN_MESSAGE_TYPE.PERSONAL);
+    sign = signMessage(SIGN_MESSAGE_TYPE.PERSONAL);
+  } else if (type === MESSAGE_TYPE.ETH_SIGN_TYPED_DATA) {
+    cancel = cancelMessage(SIGN_MESSAGE_TYPE.TYPED);
+    sign = signMessage(SIGN_MESSAGE_TYPE.TYPED);
+  } else if (type === MESSAGE_TYPE.ETH_SIGN) {
+    cancel = cancelMessage(SIGN_MESSAGE_TYPE.MESSAGE);
+    sign = signMessage(SIGN_MESSAGE_TYPE.MESSAGE);
+  }
+
+  return { sign, cancel };
+};
+
 const stopPropagation = (event) => {
   if (event?.stopPropagation) {
     event.stopPropagation();
@@ -211,20 +242,16 @@ const ConfirmTxScreen = ({ match }) => {
   };
 
   const SigComponent = signatureSelect(txData);
+  const messageType = messageTypeSelect(txData, signMessage, cancelMessage);
 
   return (
     <SigComponent
+      {...messageType}
       txData={txData}
       key={txData.id}
       identities={identities}
       currentCurrency={currentCurrency}
       blockGasLimit={blockGasLimit}
-      signMessage={signMessage(SIGN_MESSAGE_TYPE.MESSAGE)}
-      signPersonalMessage={signMessage(SIGN_MESSAGE_TYPE.PERSONAL)}
-      signTypedMessage={signMessage(SIGN_MESSAGE_TYPE.TYPED)}
-      cancelMessage={cancelMessage(SIGN_MESSAGE_TYPE.MESSAGE)}
-      cancelPersonalMessage={cancelMessage(SIGN_MESSAGE_TYPE.PERSONAL)}
-      cancelTypedMessage={cancelMessage(SIGN_MESSAGE_TYPE.TYPED)}
       ///: BEGIN:ONLY_INCLUDE_IN(build-mmi)
       selectedAccount={selectedAccount}
       ///: END:ONLY_INCLUDE_IN

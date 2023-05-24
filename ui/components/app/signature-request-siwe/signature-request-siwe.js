@@ -37,18 +37,14 @@ import SignatureRequestHeader from '../signature-request-header';
 import Header from './signature-request-siwe-header';
 import Message from './signature-request-siwe-message';
 
-export default function SignatureRequestSIWE({
-  txData,
-  cancelPersonalMessage,
-  signPersonalMessage,
-}) {
+export default function SignatureRequestSIWE({ txData, cancel, sign }) {
+
   const dispatch = useDispatch();
   const history = useHistory();
   const t = useContext(I18nContext);
 
   const allAccounts = useSelector(accountsWithSendEtherInfoSelector);
   const subjectMetadata = useSelector(getSubjectMetadata);
-
   const messagesCount = useSelector(getTotalUnapprovedMessagesCount);
   const messagesList = useSelector(unconfirmedMessagesHashSelector);
   const mostRecentOverviewPage = useSelector(getMostRecentOverviewPage);
@@ -85,23 +81,23 @@ export default function SignatureRequestSIWE({
   const onSign = useCallback(
     async (event) => {
       try {
-        await signPersonalMessage(event);
+        await sign(event);
       } catch (e) {
         log.error(e);
       }
     },
-    [signPersonalMessage],
+    [sign],
   );
 
   const onCancel = useCallback(
     async (event) => {
       try {
-        await cancelPersonalMessage(event);
+        await cancel(event);
       } catch (e) {
         log.error(e);
       }
     },
-    [cancelPersonalMessage],
+    [cancel],
   );
 
   const handleCancelAll = () => {
@@ -245,9 +241,9 @@ SignatureRequestSIWE.propTypes = {
   /**
    * Handler for cancel button
    */
-  cancelPersonalMessage: PropTypes.func.isRequired,
+  cancel: PropTypes.func.isRequired,
   /**
    * Handler for sign button
    */
-  signPersonalMessage: PropTypes.func.isRequired,
+  sign: PropTypes.func.isRequired,
 };

@@ -2,7 +2,6 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
 
-import { MESSAGE_TYPE } from '../../../../shared/constants/app';
 import { goHome, cancelMsgs, showModal } from '../../../store/actions';
 import {
   accountsWithSendEtherInfoSelector,
@@ -70,39 +69,17 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mergeProps(stateProps, dispatchProps, ownProps) {
-  const {
-    signPersonalMessage,
-    signTypedMessage,
-    cancelPersonalMessage,
-    cancelTypedMessage,
-    signMessage,
-    cancelMessage,
-    txData,
-  } = ownProps;
+  const { cancel, sign, txData } = ownProps;
 
   const { allAccounts, messagesList, ...otherStateProps } = stateProps;
 
   const {
-    type,
     msgParams: { from },
   } = txData;
 
   const fromAccount = getAccountByAddress(allAccounts, from);
 
   const { cancelAll: dispatchCancelAll } = dispatchProps;
-
-  let cancel;
-  let sign;
-  if (type === MESSAGE_TYPE.PERSONAL_SIGN) {
-    cancel = cancelPersonalMessage;
-    sign = signPersonalMessage;
-  } else if (type === MESSAGE_TYPE.ETH_SIGN_TYPED_DATA) {
-    cancel = cancelTypedMessage;
-    sign = signTypedMessage;
-  } else if (type === MESSAGE_TYPE.ETH_SIGN) {
-    cancel = cancelMessage;
-    sign = signMessage;
-  }
 
   return {
     ...ownProps,
