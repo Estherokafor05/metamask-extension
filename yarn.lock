@@ -4655,7 +4655,7 @@ __metadata:
     eth-rpc-errors: ^4.0.2
     ethereumjs-util: ^7.0.10
     immer: ^9.0.6
-  checksum: e7bf00b7470f49a9b466cded53e77fdb9354ec66b13d9bdcf473f6a3cd9a33fe67ab5b4248c8a12c1af34aadf21c09f67c8b5b9b67f6d6f3ead702d06dec5d7a
+  checksum: 84ad9a52cb3674d0002b032bb32aeaf11c8e96f84a64ec9c42edfc8d21fc24c9b6b6b7558c1605021ee62e275fd59092bf4e6a7c7968182e3169169f2cf294b7
   languageName: node
   linkType: hard
 
