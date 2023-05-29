@@ -21,6 +21,9 @@ import { MESSAGE_TYPE } from '../../../shared/constants/app';
 import { TransactionStatus } from '../../../shared/constants/transaction';
 import { getSendTo } from '../../ducks/send';
 import { getProviderConfig } from '../../ducks/metamask/metamask';
+// ///: BEGIN:ONLY_INCLUDE_IN(build-mmi)
+import { useMMICustodySignMessage } from '../../hooks/useMMICustodySignMessage';
+// ///: END:ONLY_INCLUDE_IN
 
 const SIGN_MESSAGE_TYPE = {
   MESSAGE: 'message',
@@ -50,7 +53,6 @@ const signatureSelect = (txData) => {
 };
 
 const messageTypeSelect = (txData, signMessage, cancelMessage) => {
-  console.log(txData);
   const {
     type,
     msgParams: { siwe },
@@ -225,6 +227,15 @@ const ConfirmTxScreen = ({ match }) => {
     } else {
       action = actions.signTypedMsg;
     }
+
+    let isMMISignFn = false;
+    ///: BEGIN:ONLY_INCLUDE_IN(build-mmi)
+    isMMISignFn = true;
+    if (isMMISignFn) {
+      return dispatch(useMMICustodySignMessage(params, action));
+    }
+    ///: END:ONLY_INCLUDE_IN
+
     return dispatch(action?.(params));
   };
 
