@@ -857,14 +857,34 @@ export class NetworkController extends EventEmitter {
    * supports EIP-1559; otherwise it doesn't.
    *
    * @param provider - A provider, which is guaranteed to be available.
+   * @param maxRetries - The maximum number of retries to attempt fetching the latest block. Defaults to 3.
    * @returns A promise that resolves to true if the network supports EIP-1559
-   * and false otherwise.
+   * and false otherwise. Throws an error if unable to fetch the last block.
    */
   async #determineEIP1559Compatibility(
     provider: SafeEventEmitterProvider,
+    maxRetries = 3,
   ): Promise<boolean> {
-    const latestBlock = await this.#getLatestBlock(provider);
-    return latestBlock?.baseFeePerGas !== undefined;
+    let latestBlock;
+    const retryInterval = 500;
+
+    for (let retry = 0; retry <= maxRetries; retry++) {
+      latestBlock = await this.#getLatestBlock(provider);
+
+      if (retry < maxRetries && !latestBlock) {
+        await new Promise((resolve) => setTimeout(resolve, retryInterval));
+      } else {
+        break;
+      }
+    }
+    if (!latestBlock) {
+      throw new Error('Unable to fetch last block');
+    }
+
+    if (latestBlock?.baseFeePerGas !== undefined) {
+      return true;
+    }
+    return false;
   }
 
   /**
