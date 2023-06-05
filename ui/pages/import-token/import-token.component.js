@@ -640,19 +640,12 @@ class ImportToken extends Component {
   }
 
   render() {
-    const { history, clearPendingTokens, mostRecentOverviewPage } = this.props;
-
     return (
       <PageContainer
-        title={this.context.t('importTokensCamelCase')}
         tabsComponent={this.renderTabs()}
         onSubmit={() => this.handleNext()}
         hideCancel
         disabled={Boolean(this.hasError()) || !this.hasSelected()}
-        onClose={() => {
-          clearPendingTokens();
-          history.push(mostRecentOverviewPage);
-        }}
       />
     );
   }

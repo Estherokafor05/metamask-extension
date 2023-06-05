@@ -14,6 +14,7 @@ import {
   isCurrentProviderCustom,
 } from '../../selectors';
 import {
+  hideImportTokensPopover,
   lockMetamask,
   setCurrentCurrency,
   setLastActiveTime,
@@ -32,6 +33,8 @@ function mapStateToProps(state) {
   const { alertOpen, alertMessage, isLoading, loadingMessage } = appState;
   const { autoLockTimeLimit = 0 } = getPreferences(state);
   const { completedOnboarding } = state.metamask;
+
+  console.log('state is: ', state);
 
   return {
     alertOpen,
@@ -60,6 +63,7 @@ function mapStateToProps(state) {
     completedOnboarding,
     isAccountMenuOpen: state.metamask.isAccountMenuOpen,
     isNetworkMenuOpen: state.metamask.isNetworkMenuOpen,
+    isImportTokensPopoverOpen: state.appState.importTokensPopoverOpen,
     accountDetailsAddress: state.appState.accountDetailsAddress,
   };
 }
@@ -75,6 +79,7 @@ function mapDispatchToProps(dispatch) {
     prepareToLeaveSwaps: () => dispatch(prepareToLeaveSwaps()),
     toggleAccountMenu: () => dispatch(toggleAccountMenu()),
     toggleNetworkMenu: () => dispatch(toggleNetworkMenu()),
+    hideImportTokensPopover: () => dispatch(hideImportTokensPopover()),
   };
 }
 

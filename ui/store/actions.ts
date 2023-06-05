@@ -2602,6 +2602,18 @@ export function hideNetworkDropdown() {
   };
 }
 
+export function showImportTokensPopover(): Action {
+  return {
+    type: actionConstants.IMPORT_TOKENS_POPOVER_OPEN,
+  };
+}
+
+export function hideImportTokensPopover(): Action {
+  return {
+    type: actionConstants.IMPORT_TOKENS_POPOVER_CLOSE,
+  };
+}
+
 type ModalPayload = { name: string } & Record<string, any>;
 
 export function showModal(payload: ModalPayload): PayloadAction<ModalPayload> {
