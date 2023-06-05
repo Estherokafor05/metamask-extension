@@ -113,6 +113,7 @@ const ConfirmTxScreen = ({ match }) => {
   ///: BEGIN:ONLY_INCLUDE_IN(build-mmi)
   const selectedAccount = useSelector(getSelectedAccount);
   const accountType = useSelector(getAccountType);
+  const { custodySignFn } = useMMICustodySignMessage();
   ///: END:ONLY_INCLUDE_IN
 
   const [prevValue, setPrevValues] = useState();
@@ -232,7 +233,7 @@ const ConfirmTxScreen = ({ match }) => {
 
     ///: BEGIN:ONLY_INCLUDE_IN(build-mmi)
     if (accountType === 'custody') {
-      return dispatch(useMMICustodySignMessage(params, action));
+      return dispatch(custodySignFn(params, action));
     }
     ///: END:ONLY_INCLUDE_IN
 
