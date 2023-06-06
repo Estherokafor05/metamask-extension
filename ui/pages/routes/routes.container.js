@@ -34,8 +34,6 @@ function mapStateToProps(state) {
   const { autoLockTimeLimit = 0 } = getPreferences(state);
   const { completedOnboarding } = state.metamask;
 
-  console.log('state is: ', state);
-
   return {
     alertOpen,
     alertMessage,

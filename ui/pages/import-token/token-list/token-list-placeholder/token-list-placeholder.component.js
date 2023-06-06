@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Button from '../../../../components/ui/button';
-import IconTokenSearch from '../../../../components/ui/icon/icon-token-search';
 import ZENDESK_URLS from '../../../../helpers/constants/zendesk-url';
+import Box from '../../../../components/ui/box/box';
+import { ButtonLink, Text } from '../../../../components/component-library';
+import {
+  Display,
+  FlexDirection,
+  TextAlign,
+  TextColor,
+  AlignItems,
+} from '../../../../helpers/constants/design-system';
 
 export default class TokenListPlaceholder extends Component {
   static contextTypes = {
@@ -11,21 +18,25 @@ export default class TokenListPlaceholder extends Component {
 
   render() {
     return (
-      <div className="token-list-placeholder">
-        <IconTokenSearch size={64} color="var(--color-icon-muted)" />
-        <div className="token-list-placeholder__text">
+      <Box
+        display={Display.Flex}
+        alignItems={AlignItems.Center}
+        flexDirection={FlexDirection.Column}
+        className="token-list-placeholder"
+        textAlign={TextAlign.Center}
+      >
+        <Text color={TextColor.textAlternative}>
           {this.context.t('addAcquiredTokens')}
-        </div>
-        <Button
-          type="link"
+        </Text>
+        <ButtonLink
           className="token-list-placeholder__link"
           href={ZENDESK_URLS.ADD_CUSTOM_TOKENS}
           target="_blank"
           rel="noopener noreferrer"
         >
           {this.context.t('learnMoreUpperCase')}
-        </Button>
-      </div>
+        </ButtonLink>
+      </Box>
     );
   }
 }
