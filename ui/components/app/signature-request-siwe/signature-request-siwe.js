@@ -38,7 +38,6 @@ import Header from './signature-request-siwe-header';
 import Message from './signature-request-siwe-message';
 
 export default function SignatureRequestSIWE({ txData, cancel, sign }) {
-
   const dispatch = useDispatch();
   const history = useHistory();
   const t = useContext(I18nContext);
