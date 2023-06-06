@@ -48,6 +48,7 @@ import {
   Display,
   FontWeight,
   Severity,
+  TextColor,
   TextVariant,
 } from '../../../helpers/constants/design-system';
 
@@ -77,7 +78,7 @@ import {
   MetaMetricsTokenEventSource,
 } from '../../../../shared/constants/metametrics';
 import { getMostRecentOverviewPage } from '../../../ducks/history/history';
-import Identicon from '../../ui/identicon/identicon.component';
+import Identicon from '../../ui/identicon';
 import TokenBalance from '../../ui/token-balance/token-balance';
 
 export const ImportTokensPopover = ({ onClose }) => {
@@ -118,7 +119,6 @@ export const ImportTokensPopover = ({ onClose }) => {
   const isMainnet = useSelector(getIsMainnet);
   const identities = useSelector(getMetaMaskIdentities);
   const tokens = useSelector((state) => state.metamask.tokens);
-  const pendingTokens = useSelector((state) => state.metamask.pendingTokens);
   const rpcPrefs = useSelector(getRpcPrefsForCurrentProvider);
 
   const [customAddress, setCustomAddress] = useState('');
@@ -156,14 +156,11 @@ export const ImportTokensPopover = ({ onClose }) => {
   // CONFIRMATION MODE
   const trackEvent = useContext(MetaMetricsContext);
   const mostRecentOverviewPage = useSelector(getMostRecentOverviewPage);
-  const pendingTokenz = useSelector(getPendingTokens);
-  const getTokenName = (name, symbol) => {
-    return name === undefined ? symbol : `${name} (${symbol})`;
-  };
+  const pendingTokens = useSelector(getPendingTokens);
   const handleAddTokens = useCallback(async () => {
     await dispatch(addTokens(pendingTokens));
 
-    const addedTokenValues = Object.values(pendingTokenz);
+    const addedTokenValues = Object.values(pendingTokens);
     const firstTokenAddress = addedTokenValues?.[0].address?.toLowerCase();
 
     addedTokenValues.forEach((pendingToken) => {
@@ -232,7 +229,7 @@ export const ImportTokensPopover = ({ onClose }) => {
 
   const handleCustomSymbolChange = (value) => {
     const symbol = value.trim();
-    const symbolLength = customSymbol.length;
+    const symbolLength = symbol.length;
     let symbolError = null;
 
     if (symbolLength <= 0 || symbolLength >= 12) {
@@ -417,6 +414,7 @@ export const ImportTokensPopover = ({ onClose }) => {
     }
   };
 
+  // Determines whether to show the Search/Import or Confirm action
   const isConfirming = mode === 'confirm';
 
   return (
@@ -432,26 +430,50 @@ export const ImportTokensPopover = ({ onClose }) => {
           <Text>{t('likeToImportTokens')}</Text>
           <Box marginTop={4} marginBottom={4}>
             <Box display={Display.Flex}>
-              <Text variant={TextVariant.bodySm} style={{flex: 1}}>{t('token')}</Text>
-              <Text variant={TextVariant.bodySm} style={{flex: '0 0 30%'}}>{t('balance')}</Text>
+              <Text variant={TextVariant.bodySm} style={{ flex: 1 }}>
+                {t('token')}
+              </Text>
+              <Text variant={TextVariant.bodySm} style={{ flex: '0 0 30%' }}>
+                {t('balance')}
+              </Text>
             </Box>
-            <Box display={Display.Flex} style={{flexFlow: 'column nowrap'}}>
+            <Box display={Display.Flex} style={{ flexFlow: 'column nowrap' }}>
               {Object.entries(pendingTokens).map(([address, token]) => {
                 const { name, symbol } = token;
                 return (
-                  <Box key={address} display={Display.Flex} alignItems={AlignItems.center} style={{flexFlow: 'row nowrap', }}>
-                    <Box display={Display.Flex} alignItems={AlignItems.center}>
-                      <Identicon diameter={48} address={address} />
-                      <Box marginInlineEnd={4}>{getTokenName(name, symbol)}</Box>
+                  <Box
+                    key={address}
+                    marginBottom={4}
+                    display={Display.Flex}
+                    style={{ flexFlow: 'row nowrap' }}
+                  >
+                    <Box
+                      display={Display.Flex}
+                      alignItems={AlignItems.center}
+                      style={{ flexGrow: 1 }}
+                    >
+                      <Identicon diameter={36} address={address} />
+                      <Box marginInlineStart={4}>
+                        <Text>{name}</Text>
+                        <Text
+                          variant={TextVariant.bodySm}
+                          color={TextColor.textAlternative}
+                        >
+                          {symbol}
+                        </Text>
+                      </Box>
                     </Box>
-                    <Box style={{flex: '0 0 30%'}}>
+                    <Box
+                      style={{ flex: '0 0 30%' }}
+                      alignItems={AlignItems.flexStart}
+                    >
                       <TokenBalance token={token} />
                     </Box>
                   </Box>
                 );
               })}
             </Box>
-            <Box display={Display.Flex} gap={2}>
+            <Box display={Display.Flex} gap={2} marginTop={4}>
               <ButtonSecondary
                 onClick={() => {
                   dispatch(clearPendingTokens());
@@ -461,7 +483,13 @@ export const ImportTokensPopover = ({ onClose }) => {
               >
                 {t('back')}
               </ButtonSecondary>
-              <ButtonPrimary onClick={handleAddTokens} block>
+              <ButtonPrimary
+                onClick={() => {
+                  handleAddTokens();
+                  onClose();
+                }}
+                block
+              >
                 {t('import')}
               </ButtonPrimary>
             </Box>
