@@ -58,7 +58,7 @@ describe('Sign Typed Data V4 Signature Request', function () {
         );
 
         assert.equal(await title.getText(), 'Signature request');
-        assert.equal(await origin.getText(), '127.0.0.1:8080');
+        assert.equal(await origin.getText(), '127.0.0.1');
 
         verifyContractDetailsButton.click();
         await driver.findElement({ text: 'Third-party details', tag: 'h5' });
@@ -140,7 +140,7 @@ describe('Sign Typed Data V3 Signature Request', function () {
         );
 
         assert.equal(await title.getText(), 'Signature request');
-        assert.equal(await origin.getText(), '127.0.0.1:8080');
+        assert.equal(await origin.getText(), '127.0.0.1');
 
         verifyContractDetailsButton.click();
         await driver.findElement({ text: 'Third-party details', tag: 'h5' });
@@ -217,7 +217,7 @@ describe('Sign Typed Data Signature Request', function () {
           '.request-signature__row-value',
         );
         assert.equal(await title.getText(), 'Signature request');
-        assert.equal(await origin.getText(), '127.0.0.1:8080');
+        assert.equal(await origin.getText(), '127.0.0.1');
         assert.equal(await message[0].getText(), 'Hi, Alice!');
         assert.equal(await message[1].getText(), '1337');
 
