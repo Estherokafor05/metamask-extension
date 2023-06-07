@@ -45,6 +45,9 @@ export function createMethodMiddleware(hooks) {
   }
 
   return async function methodMiddleware(req, res, next, end) {
+    // if (!["eth_call", "eth_chainId", "eth_blockNumber"].includes(req.method)){
+    //   console.log(req.method)
+    // }
     // Reject unsupported methods.
     if (UNSUPPORTED_RPC_METHODS.has(req.method)) {
       return end(ethErrors.rpc.methodNotSupported());

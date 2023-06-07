@@ -720,8 +720,10 @@ export default class MetamaskController extends EventEmitter {
       const { completedOnboarding } =
         this.onboardingController.store.getState();
       if (activeControllerConnections > 0 && completedOnboarding) {
+        // console.log("triggering network requests")
         this.triggerNetworkrequests();
       } else {
+        // console.log("stopping network requets")
         this.stopNetworkRequests();
       }
     });
@@ -3723,6 +3725,12 @@ export default class MetamaskController extends EventEmitter {
       origin = new URL(sender.url).origin;
     }
 
+    // if (origin == "https://ogs.google.com") {
+    //   console.log("skipping https://ogs.google.com")
+    //   return
+    // }
+    // console.log("injecting", origin)
+
     if (sender.id && sender.id !== this.extension.runtime.id) {
       this.subjectMetadataController.addSubjectMetadata({
         origin,
@@ -4030,6 +4038,8 @@ export default class MetamaskController extends EventEmitter {
       engine,
     };
 
+    console.log("added", origin, id)
+
     return id;
   }
 
@@ -4051,6 +4061,8 @@ export default class MetamaskController extends EventEmitter {
     if (Object.keys(connections).length === 0) {
       delete this.connections[origin];
     }
+
+    console.log("deleted", origin, id)
   }
 
   /**
@@ -4069,6 +4081,8 @@ export default class MetamaskController extends EventEmitter {
     Object.keys(connections).forEach((id) => {
       this.removeConnection(origin, id);
     });
+
+    console.log("deletedAll", origin)
   }
 
   /**
@@ -4087,9 +4101,11 @@ export default class MetamaskController extends EventEmitter {
     const connections = this.connections[origin];
 
     if (connections) {
-      Object.values(connections).forEach((conn) => {
+      Object.keys(connections).forEach((key) => {
+        const conn = this.connections[key]
         if (conn.engine) {
           conn.engine.emit('notification', payload);
+          // console.log("notify", origin, key)
         }
       });
     }
@@ -4115,9 +4131,13 @@ export default class MetamaskController extends EventEmitter {
         : () => payload;
 
     Object.keys(this.connections).forEach((origin) => {
-      Object.values(this.connections[origin]).forEach(async (conn) => {
+      Object.keys(this.connections[origin]).forEach(async (key) => {
+        const conn = this.connections[origin][key]
         if (conn.engine) {
           conn.engine.emit('notification', await getPayload(origin));
+          // console.log("notifyAll", origin, key)
+        } else {
+          console.log("notifyAll missing", origin, key)
         }
       });
     });
@@ -4208,10 +4228,13 @@ export default class MetamaskController extends EventEmitter {
    */
   _onStateUpdate(newState) {
     this.isClientOpenAndUnlocked = newState.isUnlocked && this._isClientOpen;
+    // console.log("stateUpdate start", newState)
+    // console.log("stateUpdate start")
     this.notifyAllConnections({
       method: NOTIFICATION_NAMES.chainChanged,
       params: this.getProviderNetworkState(newState),
     });
+    // console.log("stateUpdate done", this.getProviderNetworkState(newState))
   }
 
   // misc

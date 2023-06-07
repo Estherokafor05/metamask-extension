@@ -48,16 +48,68 @@ log.setDefaultLevel(process.env.METAMASK_DEBUG ? 'debug' : 'warn');
 // setup plugin communication
 //
 
-if (shouldInjectProvider()) {
-  // setup background connection
-  const metamaskStream = new WindowPostMessageStream({
-    name: INPAGE,
-    target: CONTENT_SCRIPT,
-  });
+const start = async () => {
 
-  initializeProvider({
-    connectionStream: metamaskStream,
-    logger: log,
-    shouldShimWeb3: true,
-  });
+  if (shouldInjectProvider()) {
+    // console.log("jiexi - inpage")
+    // setup background connection
+
+    // console.log("page visibility", document.visibilityState, Date.now())
+
+
+    // document.addEventListener('visibilitychange', () => {
+    //   console.log("visibility change", document.visibilityState)
+    // })
+
+    // console.log("ready state", document.readyState)
+
+    // document.addEventListener("readystatechange", (event) => {
+    //   console.log("ready state change", document.readyState)
+    //   // if (event.target.readyState === "interactive") {k
+    //   //   initLoader();
+    //   // } else if (event.target.readyState === "complete") {
+    //   //   initApp();
+    //   // }
+    // });
+
+    // document.addEventListener('visibilitychange', () => {
+    //   console.log("visibility change", document.visibilityState)
+    // })
+
+    // document.addEventListener("readystatechange", (event) => {
+    //   console.log("ready state change", document.readyState)
+    //   // if (event.target.readyState === "interactive") {k
+    //   //   initLoader();
+    //   // } else if (event.target.readyState === "complete") {
+    //   //   initApp();
+    //   // }
+    // });
+
+    const whenActivated = new Promise((resolve) => {
+      if (document.prerendering) {
+        console.log("doc inpage is prerendering")
+        document.addEventListener('prerenderingchange', resolve);
+      } else {
+        console.log("doc inpage is not prerendering")
+        resolve();
+      }
+    });
+
+    await whenActivated
+
+
+    const metamaskStream = new WindowPostMessageStream({
+      name: INPAGE,
+      target: CONTENT_SCRIPT,
+    });
+
+
+    initializeProvider({
+      connectionStream: metamaskStream,
+      logger: log,
+      shouldShimWeb3: true,
+    });
+  }
 }
+
+start()

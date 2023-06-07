@@ -293,11 +293,28 @@ const initPhishingStreams = () => {
  */
 
 const setupPageStreams = () => {
+  // console.log("jiexi - setupPageStreams")
   // the transport-specific streams for communication between inpage and background
   const pageStream = new WindowPostMessageStream({
     name: CONTENT_SCRIPT,
     target: INPAGE,
   });
+  pageStream.on('data', (data) => {
+    console.log("content => page", JSON.stringify(data.data))
+  });
+  pageStream.on('error', (data) => {
+    console.log("content => page (error)", data)
+  });
+  pageStream.on('end', (data) => {
+    console.log("content => page (end)", data)
+  });
+
+  // pageStream.emit('data', {data: {
+  //   id: "666",
+  //   jsonrpc: "2.0",
+  //   method: "metamask_getProviderState",
+  //   params: undefined
+  // }})
 
   if (isManifestV3) {
     pageStream.on('data', ({ data: { method } }) => {
@@ -327,6 +344,15 @@ const setupExtensionStreams = () => {
   extensionPort = browser.runtime.connect({ name: CONTENT_SCRIPT });
   extensionStream = new PortStream(extensionPort);
   extensionStream.on('data', extensionStreamMessageListener);
+  extensionStream.on('data', (data) => {
+    console.log("page => content", JSON.stringify(data.data))
+  });
+  extensionStream.on('error', (data) => {
+    console.log("page => content (error)", data)
+  });
+  extensionStream.on('end', (data) => {
+    console.log("page => content (end)", data)
+  });
 
   // create and connect channel muxers
   // so we can handle the channels individually
@@ -472,7 +498,9 @@ const destroyLegacyExtensionStreams = () => {
  * @returns {Promise|undefined}
  */
 const onMessageSetUpExtensionStreams = (msg) => {
+  console.log("cs ext message", msg)
   if (msg.name === EXTENSION_MESSAGES.READY) {
+    console.log("extension ready message received")
     if (!extensionStream) {
       setupExtensionStreams();
       setupLegacyExtensionStreams();
@@ -587,6 +615,7 @@ function extensionStreamMessageListener(msg) {
  * Relies on obj-multiplex and post-message-stream implementation details.
  */
 function notifyInpageOfStreamFailure() {
+  console.log("inpage stream failed")
   window.postMessage(
     {
       target: INPAGE, // the post-message-stream "target"
@@ -615,20 +644,61 @@ function redirectToPhishingWarning() {
   window.location.href = `${baseUrl}#${querystring}`;
 }
 
-const start = () => {
+const start = async () => {
+  const whenActivated = new Promise((resolve) => {
+    if (document.prerendering) {
+      console.log("doc cs is prerendering")
+      document.addEventListener('prerenderingchange', resolve);
+    } else {
+      console.log("doc cs is not prerendering")
+      resolve();
+    }
+  });
+
+
   const isDetectedPhishingSite =
     window.location.origin === phishingPageUrl.origin &&
     window.location.pathname === phishingPageUrl.pathname;
 
   if (isDetectedPhishingSite) {
+    await whenActivated
     initPhishingStreams();
     return;
   }
+
+  // console.log("page visibility", document.visibilityState, Date.now())
+
+
+  // document.addEventListener('visibilitychange', () => {
+  //   console.log("visibility change", document.visibilityState)
+  // })
+
+  // console.log("ready state", document.readyState)
+
+  // document.addEventListener("readystatechange", (event) => {
+  //   console.log("ready state change", document.readyState)
+  //   // if (event.target.readyState === "interactive") {k
+  //   //   initLoader();
+  //   // } else if (event.target.readyState === "complete") {
+  //   //   initApp();
+  //   // }
+  // });
+
+  // if (window.location.origin === "https://ogs.google.com") {
+  //   console.log("skipping new tab injection")
+  //   return
+  // } else {
+  //   console.log("injecting content script with", window.location.origin)
+  // }
+
+
 
   if (shouldInjectProvider()) {
     if (!isManifestV3) {
       injectScript(inpageBundle);
     }
+
+    await whenActivated
     initStreams();
   }
 };

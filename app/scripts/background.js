@@ -186,6 +186,7 @@ browser.runtime.onConnect.addListener(async (...args) => {
   await isInitialized;
 
   // This is set in `setupController`, which is called as part of initialization
+  // console.log("runtime remote onConnect", ...args)
   connectRemote(...args);
 });
 browser.runtime.onConnectExternal.addListener(async (...args) => {
@@ -193,6 +194,7 @@ browser.runtime.onConnectExternal.addListener(async (...args) => {
   await isInitialized;
 
   // This is set in `setupController`, which is called as part of initialization
+  // console.log("runtime external onConnect", ...args)
   connectExternal(...args);
 });
 
@@ -661,6 +663,7 @@ export function setupController(
     }
     ///: END:ONLY_INCLUDE_IN
 
+    console.log("portStream remote port", remotePort.sender)
     const portStream =
       overrides?.getPortStream?.(remotePort) || new PortStream(remotePort);
     controller.setupUntrustedCommunication({
