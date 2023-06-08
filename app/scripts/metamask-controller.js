@@ -1284,9 +1284,7 @@ export default class MetamaskController extends EventEmitter {
     this.signatureController = new SignatureController({
       messenger: this.controllerMessenger.getRestricted({
         name: 'SignatureController',
-        allowedActions: [
-          `${this.approvalController.name}:addRequest`,
-        ],
+        allowedActions: [`${this.approvalController.name}:addRequest`],
       }),
       keyringController: this.keyringController,
       isEthSignEnabled: () =>
