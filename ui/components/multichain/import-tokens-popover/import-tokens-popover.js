@@ -188,6 +188,7 @@ export const ImportTokensPopover = ({ onClose }) => {
     } else {
       history.push(mostRecentOverviewPage);
     }
+    onClose();
   }, [dispatch, history, mostRecentOverviewPage, pendingTokens, trackEvent]);
 
   useEffect(() => {
@@ -508,11 +509,12 @@ export const ImportTokensPopover = ({ onClose }) => {
                           networkName,
                           <ButtonLink
                             key="token-detection-announcement"
-                            onClick={() =>
+                            onClick={() => {
                               history.push(
                                 `${SECURITY_ROUTE}#token-description`,
                               )
-                            }
+                              onClose();
+                            }}
                           >
                             {t('enableFromSettings')}
                           </ButtonLink>,
