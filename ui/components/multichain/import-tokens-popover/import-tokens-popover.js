@@ -502,7 +502,7 @@ export const ImportTokensPopover = ({ onClose }) => {
               <Tab tabKey="search" name={t('search')}>
                 <Box className="import-token__search-token">
                   {useTokenDetection ? null : (
-                    <BannerAlert severity={Severity.Info}>
+                    <BannerAlert severity={Severity.Info} marginBottom={4}>
                       <Text>
                         {t('enhancedTokenDetectionAlertMessage', [
                           networkName,
