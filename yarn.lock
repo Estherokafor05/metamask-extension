@@ -4260,17 +4260,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@metamask/eth-trezor-keyring@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@metamask/eth-trezor-keyring@npm:1.0.0"
+"@metamask/eth-trezor-keyring@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@metamask/eth-trezor-keyring@npm:1.1.0"
   dependencies:
     "@ethereumjs/tx": ^4.0.0
     "@ethereumjs/util": ^8.0.0
     "@metamask/eth-sig-util": ^5.0.2
+    "@metamask/utils": ^4.0.0
     "@trezor/connect-plugin-ethereum": ^9.0.1
     "@trezor/connect-web": ^9.0.6
     hdkey: 0.8.0
-  checksum: fd7110ac7cd1f91f6fbb02718c2a03e7cc9940449c2382c1e7513b22a65f22905cd08c9d8dc3c87ac11d7a25cd092146f29cd6bc1b53b36694c5933bbb65ed41
+  checksum: 0b331553bb14067d1e91c2fb89152733b897c212c476b888ab3cfad5f54723591307a09a159f32b8ebe251ce7898663ac73d09d1cead2b880c2a0f3d047c3754
   languageName: node
   linkType: hard
 
@@ -4915,6 +4916,18 @@ __metadata:
     semver: ^7.3.8
     superstruct: ^1.0.3
   checksum: 1ebc6677bb017e4d09d4af143621fe27194d8ed815234cfd76469c3c734dc1db2ea7b577c01a2096c21c04d8c9c4d721d3035b5353fe2ded3b4737f326755e43
+  languageName: node
+  linkType: hard
+
+"@metamask/utils@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "@metamask/utils@npm:4.0.0"
+  dependencies:
+    "@types/debug": ^4.1.7
+    debug: ^4.3.4
+    semver: ^7.3.8
+    superstruct: ^1.0.3
+  checksum: 6d4edca78fe1f66504ed5e5ca021a67f4b4e0893e86484c746b87039c2161c39d3b8bd8e4b9235ddfd023b2d76dd54210af94ec5550e27bc4ad9c0d7d5f3f231
   languageName: node
   linkType: hard
 
@@ -24042,7 +24055,7 @@ __metadata:
     "@metamask/eth-keyring-controller": ^10.0.1
     "@metamask/eth-ledger-bridge-keyring": ^0.15.0
     "@metamask/eth-token-tracker": ^4.0.0
-    "@metamask/eth-trezor-keyring": ^1.0.0
+    "@metamask/eth-trezor-keyring": ^1.1.0
     "@metamask/etherscan-link": ^2.2.0
     "@metamask/forwarder": ^1.1.0
     "@metamask/gas-fee-controller": ^5.0.0
