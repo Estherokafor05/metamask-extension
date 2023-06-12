@@ -544,7 +544,7 @@ export function getUnapprovedTxCount(state) {
 }
 
 export function getUnapprovedConfirmations(state) {
-  const { pendingApprovals } = state.metamask;
+  const { pendingApprovals = {} } = state.metamask;
   return Object.values(pendingApprovals);
 }
 
@@ -558,7 +558,7 @@ export function getUnapprovedTemplatedConfirmations(state) {
 export function getSuggestedTokens(state) {
   return (
     getUnapprovedConfirmations(state)?.filter(
-      ({ type, requestData: { asset } }) => {
+      ({ type, requestData: { asset = {} } }) => {
         return type === ApprovalType.WatchAsset && asset.tokenId === undefined;
       },
     ) || []
@@ -568,21 +568,10 @@ export function getSuggestedTokens(state) {
 export function getSuggestedNfts(state) {
   return (
     getUnapprovedConfirmations(state)?.filter(
-      ({
-        requestData: {
-          asset: { standard },
-          errors,
-        },
-        type,
-      }) => {
-        if (errors === undefined && standard === undefined) {
-          return false;
-        }
+      ({ requestData: { asset: { standard } = {} }, type }) => {
         return (
-          (type === ApprovalType.WatchAsset &&
-            [ERC721, ERC1155].includes(standard)) ||
-          (type === ApprovalType.WatchAsset &&
-            Object.values(errors).some((error) => Boolean(error)))
+          type === ApprovalType.WatchAsset &&
+          [ERC721, ERC1155].includes(standard)
         );
       },
     ) || []
