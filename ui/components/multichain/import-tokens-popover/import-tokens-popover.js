@@ -512,7 +512,7 @@ export const ImportTokensPopover = ({ onClose }) => {
                             onClick={() => {
                               history.push(
                                 `${SECURITY_ROUTE}#token-description`,
-                              )
+                              );
                               onClose();
                             }}
                           >
