@@ -368,7 +368,8 @@ export const ImportTokensPopover = ({ onClose }) => {
         setCustomDecimalsError(null);
         break;
 
-      case standard === TokenStandard.ERC1155 || TokenStandard.ERC721:
+      case standard === TokenStandard.ERC1155 ||
+        standard === TokenStandard.ERC721:
         setNftAddressError(
           t('nftAddressError', [
             <a
@@ -421,7 +422,10 @@ export const ImportTokensPopover = ({ onClose }) => {
   return (
     <Popover
       onBack={isConfirming ? () => setMode('') : null}
-      onClose={onClose}
+      onClose={() => {
+        dispatch(clearPendingTokens());
+        onClose();
+      }}
       centerTitle
       title={t('importTokensCamelCase')}
       className="import-tokens-popover"
@@ -598,6 +602,9 @@ export const ImportTokensPopover = ({ onClose }) => {
                   }
                   autoFocus
                   marginTop={6}
+                  inputProps={{
+                    'data-testid': 'import-tokens-popover-custom-address',
+                  }}
                 />
                 <FormTextField
                   label={
@@ -619,6 +626,9 @@ export const ImportTokensPopover = ({ onClose }) => {
                   error={customSymbolError}
                   disabled={symbolAutoFilled && !forceEditSymbol}
                   marginTop={6}
+                  inputProps={{
+                    'data-testid': 'import-tokens-popover-custom-symbol',
+                  }}
                 />
                 <FormTextField
                   label={t('decimal')}
@@ -631,6 +641,9 @@ export const ImportTokensPopover = ({ onClose }) => {
                   min={MIN_DECIMAL_VALUE}
                   max={MAX_DECIMAL_VALUE}
                   marginTop={6}
+                  inputProps={{
+                    'data-testid': 'import-tokens-popover-custom-decimals',
+                  }}
                 />
                 {customDecimals === '' && (
                   <BannerAlert severity={Severity.Warning}>
