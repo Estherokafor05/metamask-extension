@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Fuse from 'fuse.js';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import { isEqualCaseInsensitive } from '../../../../shared/modules/string-utils';
-import SearchIcon from '../../../components/ui/icon/search-icon';
 import { TextFieldSearch } from '../../../components/component-library';
 
 export default class TokenSearch extends Component {
