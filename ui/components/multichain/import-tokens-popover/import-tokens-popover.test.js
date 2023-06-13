@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, fireEvent } from '@testing-library/react';
+import { fireEvent } from '@testing-library/react';
 import { renderWithProvider } from '../../../../test/lib/render-helpers';
 
 import configureStore from '../../../store/store';
@@ -24,8 +24,8 @@ jest.mock('../../../store/actions', () => ({
     .mockImplementation(() => ({ type: 'CLEAR_PENDING_TOKENS' })),
 }));
 
-describe('Import Token', () => {
-  const render = (metamaskStateChanges, onClose = jest.fn()) => {
+describe('ImportTokensPopover', () => {
+  const render = (metamaskStateChanges = {}, onClose = jest.fn()) => {
     const store = configureStore({
       ...mockState,
       metamask: {
@@ -36,7 +36,23 @@ describe('Import Token', () => {
     return renderWithProvider(<ImportTokensPopover onClose={onClose} />, store);
   };
 
-  describe('Import Token', () => {
+  describe('Search', () => {
+    it('renders expected elements', () => {
+      const { getByText, getByPlaceholderText } = render();
+      expect(
+        getByText(`Add the tokens you've acquired using MetaMask`),
+      ).toBeInTheDocument();
+      expect(getByText('Next')).toBeDisabled();
+      expect(getByPlaceholderText('Search')).toBeInTheDocument();
+    });
+
+    it('shows the token detection notice when setting is off', () => {
+      const { getByText } = render({ useTokenDetection: false });
+      expect(getByText('Enable it from Settings.')).toBeInTheDocument();
+    });
+  });
+
+  describe('Custom Token', () => {
     it('add custom token button is disabled when no fields are populated', () => {
       const { getByText } = render();
       const customTokenButton = getByText('Custom token');
