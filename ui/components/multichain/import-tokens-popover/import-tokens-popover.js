@@ -77,7 +77,6 @@ import {
   MetaMetricsEventName,
   MetaMetricsTokenEventSource,
 } from '../../../../shared/constants/metametrics';
-import { getMostRecentOverviewPage } from '../../../ducks/history/history';
 import Identicon from '../../ui/identicon';
 import TokenBalance from '../../ui/token-balance/token-balance';
 
@@ -155,7 +154,6 @@ export const ImportTokensPopover = ({ onClose }) => {
 
   // CONFIRMATION MODE
   const trackEvent = useContext(MetaMetricsContext);
-  const mostRecentOverviewPage = useSelector(getMostRecentOverviewPage);
   const pendingTokens = useSelector(getPendingTokens);
   const handleAddTokens = useCallback(async () => {
     await dispatch(addTokens(pendingTokens));
@@ -185,18 +183,9 @@ export const ImportTokensPopover = ({ onClose }) => {
 
     if (firstTokenAddress) {
       history.push(`${ASSET_ROUTE}/${firstTokenAddress}`);
-    } else {
-      history.push(mostRecentOverviewPage);
     }
     onClose();
-  }, [dispatch, history, mostRecentOverviewPage, pendingTokens, trackEvent]);
-
-  useEffect(() => {
-    if (Object.keys(pendingTokens).length === 0) {
-      history.push(mostRecentOverviewPage);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dispatch, history, pendingTokens, trackEvent, onClose]);
 
   useEffect(() => {
     const pendingTokenKeys = Object.keys(pendingTokens);
