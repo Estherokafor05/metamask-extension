@@ -594,6 +594,15 @@ function generateRandNumBetween(x, y) {
   return randomNumber;
 }
 
+async function switchToWindow(driver, windowTitle) {
+  const windowHandles = await driver.getAllWindowHandles();
+
+  return await driver.switchToWindowWithTitle(windowTitle, windowHandles);
+}
+
+async function sleepSeconds(sec) {
+  return new Promise((resolve) => setTimeout(resolve, sec * 1000));
+}
 
 module.exports = {
   DAPP_URL,
@@ -635,4 +644,6 @@ module.exports = {
   generateETHBalance,
   roundToXDecimalPlaces,
   generateRandNumBetween,
+  switchToWindow,
+  sleepSeconds,
 };
