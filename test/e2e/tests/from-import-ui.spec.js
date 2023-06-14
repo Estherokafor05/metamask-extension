@@ -86,7 +86,7 @@ describe('MetaMask Import UI', function () {
         await driver.clickElement({ text: 'Add account', tag: 'button' });
 
         // set account name
-        await driver.fill('.new-account-create-form input', '2nd account');
+        await driver.fill('[placeholder="Account 2"]', '2nd account');
         await driver.delay(regularDelayMs);
         await driver.clickElement({ text: 'Create', tag: 'button' });
 
@@ -109,7 +109,7 @@ describe('MetaMask Import UI', function () {
         // starts a send transaction
         await driver.clickElement('[data-testid="eth-overview-send"]');
         await driver.fill(
-          'input[placeholder="Search, public address (0x), or ENS"]',
+          'input[placeholder="Enter public address (0x) or ENS name"]',
           '0x2f318C334780961FB129D2a6c30D0763d9a5C970',
         );
         await driver.fill('.unit-input__input', '1');
@@ -203,8 +203,9 @@ describe('MetaMask Import UI', function () {
         // enter private key
         await driver.findClickableElement('#private-key-box');
         await driver.fill('#private-key-box', testPrivateKey1);
-        await driver.findClickableElement({ text: 'Import', tag: 'button' });
-        await driver.clickElement({ text: 'Import', tag: 'button' });
+        await driver.clickElement(
+          '[data-testid="import-account-confirm-button"]',
+        );
 
         // should show the correct account name
         const importedAccountName = await driver.findElement(
@@ -231,8 +232,9 @@ describe('MetaMask Import UI', function () {
         // enter private key
         await driver.findClickableElement('#private-key-box');
         await driver.fill('#private-key-box', testPrivateKey2);
-        await driver.findClickableElement({ text: 'Import', tag: 'button' });
-        await driver.clickElement({ text: 'Import', tag: 'button' });
+        await driver.clickElement(
+          '[data-testid="import-account-confirm-button"]',
+        );
 
         // should see new account in account menu
         const importedAccount2Name = await driver.findElement(
@@ -304,8 +306,9 @@ describe('MetaMask Import UI', function () {
         fileInput.sendKeys(importJsonFile);
 
         await driver.fill('#json-password-box', 'foobarbazqux');
-
-        await driver.clickElement({ text: 'Import', tag: 'button' });
+        await driver.clickElement(
+          '[data-testid="import-account-confirm-button"]',
+        );
 
         // should show the correct account name
         const importedAccountName = await driver.findElement(
@@ -359,8 +362,9 @@ describe('MetaMask Import UI', function () {
         // enter private key
         await driver.findClickableElement('#private-key-box');
         await driver.fill('#private-key-box', testPrivateKey);
-        await driver.findClickableElement({ text: 'Import', tag: 'button' });
-        await driver.clickElement({ text: 'Import', tag: 'button' });
+        await driver.clickElement(
+          '[data-testid="import-account-confirm-button"]',
+        );
 
         // error should occur
         await driver.waitForSelector({
