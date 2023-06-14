@@ -581,6 +581,20 @@ async function unlockWallet(driver, walletPassword) {
   await driver.press('#password', driver.Key.ENTER);
 }
 
+
+function roundToXDecimalPlaces(number, decimalPlaces) {
+  return Math.round(number * 10 ** decimalPlaces) / 10 ** decimalPlaces;
+}
+
+function generateRandNumBetween(x, y) {
+  const min = Math.min(x, y);
+  const max = Math.max(x, y);
+  const randomNumber = Math.random() * (max - min) + min;
+
+  return randomNumber;
+}
+
+
 module.exports = {
   DAPP_URL,
   DAPP_ONE_URL,
@@ -619,4 +633,6 @@ module.exports = {
   unlockWallet,
   DEFAULT_GANACHE_OPTIONS,
   generateETHBalance,
+  roundToXDecimalPlaces,
+  generateRandNumBetween,
 };
