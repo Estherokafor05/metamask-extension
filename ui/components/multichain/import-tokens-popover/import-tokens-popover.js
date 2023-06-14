@@ -40,7 +40,7 @@ import {
   ButtonSecondary,
 } from '../../component-library';
 import TokenSearch from '../../../pages/import-token/token-search';
-import TokenList from '../../../pages/import-token/token-list/token-list.component';
+import TokenList from '../../../pages/import-token/token-list';
 
 import Box from '../../ui/box/box';
 import {
