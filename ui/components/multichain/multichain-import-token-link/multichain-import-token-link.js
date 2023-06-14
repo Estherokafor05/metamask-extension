@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Box from '../../ui/box/box';
@@ -11,7 +10,6 @@ import {
   Size,
 } from '../../../helpers/constants/design-system';
 import { useI18nContext } from '../../../hooks/useI18nContext';
-import { IMPORT_TOKEN_ROUTE } from '../../../helpers/constants/routes';
 import {
   detectNewTokens,
   showImportTokensPopover,
@@ -29,7 +27,6 @@ import {
 export const MultichainImportTokenLink = ({ className, ...props }) => {
   const trackEvent = useContext(MetaMetricsContext);
   const t = useI18nContext();
-  const history = useHistory();
   const dispatch = useDispatch();
 
   const isTokenDetectionSupported = useSelector(getIsTokenDetectionSupported);
@@ -52,7 +49,6 @@ export const MultichainImportTokenLink = ({ className, ...props }) => {
           data-testid="import-token-button"
           startIconName={IconName.Add}
           onClick={() => {
-            // history.push(IMPORT_TOKEN_ROUTE);
             dispatch(showImportTokensPopover());
             trackEvent({
               event: MetaMetricsEventName.TokenImportButtonClicked,
