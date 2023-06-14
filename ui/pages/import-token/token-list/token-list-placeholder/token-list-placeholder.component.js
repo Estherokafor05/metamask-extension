@@ -20,16 +20,14 @@ export default class TokenListPlaceholder extends Component {
     return (
       <Box
         display={Display.Flex}
-        alignItems={AlignItems.Center}
+        alignItems={AlignItems.center}
         flexDirection={FlexDirection.Column}
-        className="token-list-placeholder"
         textAlign={TextAlign.Center}
       >
         <Text color={TextColor.textAlternative}>
           {this.context.t('addAcquiredTokens')}
         </Text>
         <ButtonLink
-          className="token-list-placeholder__link"
           href={ZENDESK_URLS.ADD_CUSTOM_TOKENS}
           target="_blank"
           rel="noopener noreferrer"
