@@ -19,9 +19,7 @@ import Lock from '../lock';
 import PermissionsConnect from '../permissions-connect';
 import RestoreVaultPage from '../keychains/restore-vault';
 import RevealSeedConfirmation from '../keychains/reveal-seed';
-import ImportTokenPage from '../import-token';
 import AddNftPage from '../add-nft';
-import ConfirmImportTokenPage from '../confirm-import-token';
 import ConfirmAddSuggestedTokenPage from '../confirm-add-suggested-token';
 import Loading from '../../components/ui/loading-screen';
 import LoadingNetwork from '../../components/app/loading-network-screen';
@@ -270,17 +268,7 @@ export default class Routes extends Component {
           exact
         />
         <Authenticated path={SWAPS_ROUTE} component={Swaps} />
-        <Authenticated
-          path={IMPORT_TOKEN_ROUTE}
-          component={ImportTokenPage}
-          exact
-        />
         <Authenticated path={ADD_NFT_ROUTE} component={AddNftPage} exact />
-        <Authenticated
-          path={CONFIRM_IMPORT_TOKEN_ROUTE}
-          component={ConfirmImportTokenPage}
-          exact
-        />
         <Authenticated
           path={CONFIRM_ADD_SUGGESTED_TOKEN_ROUTE}
           component={ConfirmAddSuggestedTokenPage}
