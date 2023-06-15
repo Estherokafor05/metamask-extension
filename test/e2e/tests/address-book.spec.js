@@ -1,4 +1,6 @@
 const { strict: assert } = require('assert');
+const { Key } = require('selenium-webdriver');
+
 const {
   convertToHexValue,
   withFixtures,
@@ -181,4 +183,104 @@ describe('Address Book', function () {
       },
     );
   });
-});
+  it('add and edit contact name', async function () {
+    await withFixtures(
+      {
+        fixtures: new FixtureBuilder()
+          .withAddressBookController({
+            addressBook: {
+              '0x539': {
+                '0x2f318C334780961FB129D2a6c30D0763d9a5C970': {
+                  address: '0x2f318C334780961FB129D2a6c30D0763d9a5C970',
+                  chainId: '0x539',
+                  isEns: false,
+                  memo: '',
+                  name: 'Test Name 1',
+                },
+              },
+            },
+          })
+          .build(),
+        ganacheOptions,
+        title: this.test.title,
+      },
+      async ({ driver }) => {
+        await driver.navigate();
+        await driver.fill('#password', 'correct horse battery staple');
+        await driver.press('#password', driver.Key.ENTER);
+
+        await driver.clickElement(
+          '[data-testid="account-options-menu-button"]',
+        );
+        await driver.clickElement({ text: 'Settings', tag: 'div' });
+        await driver.clickElement({ text: 'Contacts', tag: 'div' });
+
+        await driver.clickElement({ text: 'Add contact', tag: 'button'});
+        const nameInput = await driver.findElement('#nickname');
+        await nameInput.sendKeys('Esthers');
+    const addressInput = await driver.findElement('[data-testid="ens-input"]',
+    );
+        await addressInput.sendKeys('0x74cE91B75935D6Bedc27eE002DeFa566c5946f74');
+        await driver.clickElement({ text: 'Save', tag: 'button'});
+
+        await driver.clickElement({ text: 'Esthers', tag: 'p' });
+        await driver.clickElement({ text: 'Edit', tag: 'button' });
+
+    const nameOutput = await driver.findElement('#nickname');
+        await nameOutput.sendKeys(Key.META, 'a')
+        await nameOutput.sendKeys(Key.BACK_SPACE);
+        await nameOutput.sendKeys('EsthersEdit');
+        await driver.clickElement({ text: 'Save', tag: 'button'});
+        console.log('Name input field cleared and updated successfully.');
+
+    const contactElement = await driver.findElement({ text: 'EsthersEdit', tag: 'p' });
+    const contactText = await contactElement.getText();
+    assert.equal(contactText, 'EsthersEdit');
+    console.log('Assertion passed: New contact name found on the page.');
+      })
+  });
+  it('Deletes a contact', async function () {
+    await withFixtures(
+      {
+        fixtures: new FixtureBuilder()
+          .withAddressBookController({
+            addressBook: {
+              '0x539': {
+                '0x2f318C334780961FB129D2a6c30D0763d9a5C970': {
+                  address: '0x2f318C334780961FB129D2a6c30D0763d9a5C970',
+                  chainId: '0x539',
+                  isEns: false,
+                  memo: '',
+                  name: 'EsthersEdit',
+                },
+              },
+            },
+          })
+          .build(),
+        ganacheOptions,
+        title: this.test.title,
+      },
+      async ({ driver }) => {
+        await driver.navigate();
+        await driver.fill('#password', 'correct horse battery staple');
+        await driver.press('#password', driver.Key.ENTER);
+
+        await driver.clickElement(
+          '[data-testid="account-options-menu-button"]',
+        );
+        await driver.clickElement({ text: 'Settings', tag: 'div' });
+        await driver.clickElement({ text: 'Contacts', tag: 'div' });
+
+        await driver.clickElement({ text: 'EsthersEdit', tag: 'p' });
+        await driver.clickElement({ text: 'Edit', tag: 'button' });
+        await driver.clickElement({ text: 'Delete account', tag: 'a' });
+        const contact = await driver.findElement(
+          ({ text: 'EsthersEdit', tag: 'p' })
+        );
+        const exists = await driver.isElementPresent(contact);
+        assert.equal(exists, false, 'Contact is not deleted');
+      },
+    );
+  });
+  });
+
