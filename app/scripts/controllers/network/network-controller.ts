@@ -790,6 +790,32 @@ export class NetworkController extends EventEmitter {
   }
 
   /**
+   * Fetches the latest block with retry for the network.
+   *
+   * @param provider - A provider, which is guaranteed to be available.
+   * @param maxAttempts - The maximum number of retries to attempt fetching the latest block. Defaults to 3.
+   * @returns A promise that either resolves to the block header or null if
+   * there is no latest block, or rejects with an error.
+   */
+  async #getLatestBlockWithRetry(
+    provider: SafeEventEmitterProvider,
+    maxAttempts = 3,
+  ): Promise<Block | null> {
+    let latestBlock;
+    const retryInterval = 500;
+    for (let attempts = 0; attempts <= maxAttempts; attempts++) {
+      latestBlock = await this.#getLatestBlock(provider);
+
+      if (latestBlock) {
+        return latestBlock;
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, retryInterval));
+    }
+    return null;
+  }
+
+  /**
    * Fetches the network ID for the network.
    *
    * @param provider - A provider, which is guaranteed to be available.
@@ -857,34 +883,21 @@ export class NetworkController extends EventEmitter {
    * supports EIP-1559; otherwise it doesn't.
    *
    * @param provider - A provider, which is guaranteed to be available.
-   * @param maxRetries - The maximum number of retries to attempt fetching the latest block. Defaults to 3.
    * @returns A promise that resolves to true if the network supports EIP-1559
    * and false otherwise. Throws an error if unable to fetch the last block.
    */
   async #determineEIP1559Compatibility(
     provider: SafeEventEmitterProvider,
-    maxRetries = 3,
   ): Promise<boolean> {
-    let latestBlock;
-    const retryInterval = 500;
+    const latestBlock = await this.#getLatestBlockWithRetry(provider);
 
-    for (let retry = 0; retry <= maxRetries; retry++) {
-      latestBlock = await this.#getLatestBlock(provider);
-
-      if (retry < maxRetries && !latestBlock) {
-        await new Promise((resolve) => setTimeout(resolve, retryInterval));
-      } else {
-        break;
-      }
-    }
     if (!latestBlock) {
-      throw new Error('Unable to fetch last block');
+      throw new Error(
+        'Unable to determine EIP1559 compatibility as unable to fetch last block',
+      );
     }
 
-    if (latestBlock?.baseFeePerGas !== undefined) {
-      return true;
-    }
-    return false;
+    return latestBlock.baseFeePerGas !== undefined;
   }
 
   /**

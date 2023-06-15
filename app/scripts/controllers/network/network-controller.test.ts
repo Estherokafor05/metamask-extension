@@ -951,7 +951,11 @@ describe('NetworkController', () => {
 
               await expect(
                 controller.getEIP1559Compatibility(),
-              ).rejects.toThrow(new Error('Unable to fetch last block'));
+              ).rejects.toThrow(
+                new Error(
+                  'Unable to determine EIP1559 compatibility as unable to fetch last block',
+                ),
+              );
             });
           });
         });
